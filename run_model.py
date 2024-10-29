@@ -3,19 +3,29 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Fonction pour exécuter la commande Ollama
+def clean_bos_token(input_text):
+    # Si le texte commence par un token BOS, le retirer
+    bos_token = "<BOS>"  # Adapte ce token au format utilisé par Ollama
+    if input_text.startswith(bos_token):
+        input_text = input_text[len(bos_token):].strip()
+    return input_text
+
+# Fonction pour exécuter le modèle Ollama via stdin
 def run_ollama_model(input_text):
     try:
-        # Exécuter la commande `ollama run deepseek-coder-v2` avec l'input texte
-        command = ["ollama", "run", "deepseek-coder-v2", input_text]
-        result = subprocess.run(command, capture_output=True, text=True)
-        
+        # Construire la commande pour exécuter le modèle
+        command = ["ollama", "run", "deepseek-coder-v2"]
+        input_text = clean_bos_token(input_text)
+        # Exécuter la commande et envoyer le texte via stdin
+        process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        stdout, stderr = process.communicate(input=input_text)
+
         # Vérifie si la commande s'est exécutée correctement
-        if result.returncode == 0:
-            print(result.stdout.strip())
-            return result.stdout.strip()  # Retourner le résultat du modèle
+        if process.returncode == 0:
+            print(stdout.strip())
+            return stdout.strip()  # Retourner le résultat du modèle
         else:
-            return f"Erreur dans l'exécution : {result.stderr}"
+            return f"Erreur dans l'exécution : {stderr}"
     except Exception as e:
         return f"Exception: {str(e)}"
 
@@ -23,11 +33,9 @@ def run_ollama_model(input_text):
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
-    
     input_text = data.get('text', '')
-    
-    if not input_text.startswith("[BOS]"):
-        input_text = "[BOS] " + input_text    # Si aucun texte n'est fourni
+
+    # Si aucun texte n'est fourni
     if not input_text:
         return jsonify({"error": "Le texte d'entrée est vide"}), 400
 
