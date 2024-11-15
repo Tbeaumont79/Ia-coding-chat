@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { OpenaiService } from '../../services/openai.service';
 @Component({
   selector: 'app-custom-prompt-input',
   standalone: true,
@@ -9,17 +9,11 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './custom-prompt-input.component.css',
 })
 export class CustomPromptInputComponent {
-  prompt: string = '';
-  async sendAiRequest() {
-    console.log(this.prompt);
-    const response = await fetch('http://localhost:8000/generate-text', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ prompt: this.prompt }),
-    });
-    const data = await response.json();
-    console.log(data);
+  openaiservice = inject(OpenaiService);
+
+  prompt = this.openaiservice.getPrompt();
+  sendAiRequest() {
+    this.openaiservice.setPrompt(this.prompt);
+    this.openaiservice.sendAiRequest();
   }
 }
