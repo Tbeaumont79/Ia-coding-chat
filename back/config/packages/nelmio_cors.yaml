@@ -1,0 +1,12 @@
+nelmio_cors:
+    defaults:
+        allow_origin: ['*'] # À remplacer par des origines spécifiques en production
+        allow_methods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
+        allow_headers: ['Content-Type', 'Authorization']
+        max_age: 3600
+    paths:
+        '^/generate-text':
+            allow_origin: ['*']
+            allow_headers: ['Content-Type', 'Authorization']
+            allow_methods: ['POST', 'OPTIONS']
+            max_age: 3600

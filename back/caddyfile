@@ -1,0 +1,14 @@
+:8080 {
+    reverse_proxy localhost:8000
+
+    header {
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
+    }
+
+    @options_req {
+        method OPTIONS
+    }
+    respond @options_req 204
+}

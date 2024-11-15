@@ -22,7 +22,7 @@ class OpenAiController extends AbstractController
         $myOrganization = getenv('OPENAI_ORGANIZATION');
         $client = OpenAI::client($myApiKey, $myOrganization);
         $result = $client->chat()->create([
-            'model' => 'gpt-4',
+            'model' => 'gpt-3.5-turbo',
             'messages' => [
                 ['role' => 'user', 'content' => $prompt],
             ],

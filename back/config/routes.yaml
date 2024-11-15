@@ -6,4 +6,4 @@ controllers:
 api_generate_text:
   path: /generate-text
   controller: App\Controller\OpenAiController::generateText
-  methods: POST
+  methods: [POST]
