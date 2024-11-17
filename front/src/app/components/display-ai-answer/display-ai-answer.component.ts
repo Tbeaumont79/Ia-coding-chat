@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { OpenaiService } from '../../services/openai.service';
-import { Openairesponse } from '../../models/openairesponse';
 @Component({
   selector: 'app-display-ai-answer',
   standalone: true,

@@ -6,7 +6,7 @@ import { Openairesponse } from '../models/openairesponse';
 })
 export class OpenaiService {
   data = signal<Openairesponse[]>([]);
-  prompt: string = '';
+  prompt = '';
   async sendAiRequest() {
     try {
       const response = await fetch('http://localhost:8000/generate-text', {
