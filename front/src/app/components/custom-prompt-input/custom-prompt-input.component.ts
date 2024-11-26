@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { OpenaiService } from '../../services/openai.service';
+import { OpenaiService } from '@services/openai.service';
 @Component({
   selector: 'app-custom-prompt-input',
   standalone: true,
